@@ -1,39 +1,39 @@
 'use strict';
 
-const Notes = require('../models/notes.model');
+const User = require('../models/user.model');
 
 exports.findAll = function(req, res) {
-  Notes.findAll(function(err, notes) {
+  User.findAll(function(err, user) {
     console.log('controller')
     if (err)
     res.send(err);
-    console.log('res', notes);
-    res.send(notes);
+    console.log('res', user);
+    res.send(user);
   });
 };
 
 
 exports.create = function(req, res) {
-    const new_notes = new User(req.body);
+    const new_user = new User(req.body);
 
     //handles null error 
    if(req.body.constructor === Object && Object.keys(req.body).length === 0){
         res.status(400).send({ error:true, message: 'Please provide all required field' });
     }else{
-        Notes.create(new_notes, function(err, notes) {
+        User.create(new_user, function(err, user) {
             if (err)
             res.send(err);
-            res.json({error:false,message:"Notes added successfully!",data:notes});
+            res.json({error:false,message:"User added successfully!",data:user});
         });
     }
 };
 
 
 exports.findById = function(req, res) {
-    Notes.findById(req.params.id, function(err, notes) {
+    User.findById(req.params.id, function(err, user) {
         if (err)
         res.send(err);
-        res.json(notes);
+        res.json(user);
     });
 };
 
@@ -42,10 +42,10 @@ exports.update = function(req, res) {
     if(req.body.constructor === Object && Object.keys(req.body).length === 0){
         res.status(400).send({ error:true, message: 'Please provide all required field' });
     }else{
-        User.update(req.params.id, new Notes(req.body), function(err, notes) {
+        User.update(req.params.id, new User(req.body), function(err, user) {
             if (err)
             res.send(err);
-            res.json({ error:false, message: 'Notes successfully updated' });
+            res.json({ error:false, message: 'User successfully updated' });
         });
     }
   
@@ -53,9 +53,9 @@ exports.update = function(req, res) {
 
 
 exports.delete = function(req, res) {
-    Notes.delete( req.params.id, function(err, notes) {
+    User.delete( req.params.id, function(err, user) {
     if (err)
     res.send(err);
-    res.json({ error:false, message: 'notes successfully deleted' });
+    res.json({ error:false, message: 'User successfully deleted' });
   });
 };

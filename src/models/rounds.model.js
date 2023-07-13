@@ -2,28 +2,25 @@
 var dbConn = require('./../../config/db.config');
 
 //Employee object create
-    var User = function(notes){
-        this.notes     = notes.notes;
-        this.date          = notes.date;
-        this.startTime      = notes.startTime;
-        this.endTime      = notes.endTime;
-        this.reminder    = notes.reminder;
-        this.repeat =      notes.repeat;
-       
-        this.user_id        = generateNotesId();
+    var User = function(user){
+        this.name     = user.name;
+        this.email          = user.email;
+        this.password      = user.password;
+        this.created_at     = new Date();
+        this.user_id        = generateUserId();
 
     };
 
-    var currentNotesId = 3; // Assuming the initial user ID is 1
+    var currentUserId = 3; // Assuming the initial user ID is 1
 
-function generateNotesId() {
-  var notesId = currentNotesId;
+function generateUserId() {
+  var userId = currentUserId;
   currentUserId++; // Increment the counter for the next user
-  return notesId;
+  return userId;
 }
 
-User.create = function (newNotes, result) {    
-    dbConn.query("INSERT INTO notes set ?", newNotes, function (err, res) {
+User.create = function (newUser, result) {    
+    dbConn.query("INSERT INTO user set ?", newUser, function (err, res) {
         if(err) {
             console.log("error: ", err);
             result(err, null);
@@ -35,7 +32,7 @@ User.create = function (newNotes, result) {
     });           
 };
 User.findById = function (id, result) {
-    dbConn.query("Select * from notes where notes_id = ? ", id, function (err, res) {             
+    dbConn.query("Select * from employees where user_id = ? ", id, function (err, res) {             
         if(err) {
             console.log("error: ", err);
             result(err, null);
@@ -46,19 +43,19 @@ User.findById = function (id, result) {
     });   
 };
 User.findAll = function (result) {
-    dbConn.query("Select * from notes", function (err, res) {
+    dbConn.query("Select * from user", function (err, res) {
         if(err) {
             console.log("error: ", err);
             result(null, err);
         }
         else{
-            console.log('notes : ', res);  
+            console.log('user : ', res);  
             result(null, res);
         }
     });   
 };
-User.update = function(id, notes, result){
-  dbConn.query("UPDATE user SET notes=?,date=?,startTime=?,endTime =?,reminder=?,repeat=? WHERE user_id = ?", [User.name,User.email,User.password, id], function (err, res) {
+User.update = function(id, user, result){
+  dbConn.query("UPDATE user SET name=?,email=?,password=? WHERE user_id = ?", [User.name,User.email,User.password, id], function (err, res) {
         if(err) {
             console.log("error: ", err);
             result(null, err);
@@ -68,7 +65,7 @@ User.update = function(id, notes, result){
     }); 
 };
 User.delete = function(id, result){
-     dbConn.query("DELETE FROM notes WHERE notes_id = ?", [id], function (err, res) {
+     dbConn.query("DELETE FROM user WHERE user_id = ?", [id], function (err, res) {
         if(err) {
             console.log("error: ", err);
             result(null, err);
